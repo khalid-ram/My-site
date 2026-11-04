@@ -201,6 +201,14 @@ test("every achievement card shows its company", async ({ page }) => {
   await expect(page.getByText("CSA Academy", { exact: true }).first()).toBeVisible();
 });
 
+test("homepage shows every case study", async ({ page }) => {
+  await page.goto("/");
+  for (const slug of caseStudies) {
+    await expect(page.locator(`main a[href="/case-studies/${slug}"]`).first()).toHaveCount(1);
+  }
+  await expect(page.locator("main article")).toHaveCount(caseStudies.length);
+});
+
 test("mobile menu navigates", async ({ page, isMobile }) => {
   test.skip(!isMobile, "mobile only");
   await page.goto("/");
