@@ -80,9 +80,27 @@ const caseDocument = z.object({
         width: z.number().int().positive(),
         height: z.number().int().positive(),
         alt: z.string().min(10),
+        /**
+         * Clickable areas on the design (e.g. "Live at …" or "Open prototype").
+         * Coordinates are in Figma design pixels (frame width 1440), relative to this section's top-left.
+         */
+        links: z
+          .array(
+            z.object({
+              href: z.url(),
+              label: z.string().min(3),
+              x: z.number().min(0),
+              y: z.number().min(0),
+              w: z.number().positive(),
+              h: z.number().positive(),
+            }),
+          )
+          .default([]),
       }),
     )
     .min(1),
+  /** Buttons shown next to "Download PDF" (live website, prototypes). */
+  links: z.array(z.object({ label: z.string(), href: z.url(), kind: z.enum(["live", "prototype"]) })).default([]),
 });
 
 export const caseStudySchema = z.object({

@@ -56,7 +56,7 @@ export function CaseStudySlider({ title, labels, children }: { title: string; la
           >
             {Children.map(children, (child, i) => (
               <li
-                className="w-full shrink-0 snap-start"
+                className="relative w-full shrink-0 snap-start"
                 aria-roledescription="slide"
                 aria-label={`${i + 1} of ${count}`}
                 aria-hidden={i !== active}

@@ -13,7 +13,7 @@ const staticPages = ["/", "/case-studies", "/about", "/contact"];
 const allPages = [...staticPages, ...caseStudies.map((s) => `/case-studies/${s}`)];
 
 test("only the designed case studies are published", () => {
-  expect(caseStudies.sort()).toEqual(["aqarmap-pro", "lead-quality-improvement", "listing-cloning", "new-add-listing", "sub-accounts"]);
+  expect(caseStudies.sort()).toEqual(["aqarmap-pro", "csa-academy", "lead-quality-improvement", "listing-cloning", "new-add-listing", "sub-accounts"]);
 });
 
 test("hidden case studies are not reachable or listed", async ({ page, request }) => {
@@ -176,6 +176,29 @@ test("back-to-top button appears after scrolling and returns to top", async ({ p
   await expect(btn).toBeVisible();
   await btn.click();
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(5);
+});
+
+test("CSA Academy links to the live site and prototype from the design", async ({ page }) => {
+  await page.goto("/case-studies/csa-academy");
+  const doc = page.locator("#case-study");
+  // Buttons above the design
+  await expect(doc.getByRole("link", { name: /Visit live site/ })).toHaveAttribute("href", "https://csacademyzone.com");
+  await expect(doc.getByRole("link", { name: /Open admin prototype/ }).first()).toHaveAttribute("href", "https://solid-book-40048060.figma.site");
+  // Clickable areas placed on the design images
+  const live = doc.locator('figure a[href="https://csacademyzone.com"]');
+  await expect(live).toHaveCount(1);
+  await expect(live).toHaveAttribute("target", "_blank");
+  await expect(doc.locator('figure a[href="https://solid-book-40048060.figma.site"]')).toHaveCount(3);
+  const box = await live.boundingBox();
+  expect(box && box.width > 20 && box.height > 5).toBeTruthy();
+});
+
+test("every achievement card shows its company", async ({ page }) => {
+  await page.goto("/case-studies");
+  const cards = page.locator("main article");
+  const n = await cards.count();
+  for (let i = 0; i < n; i++) await expect(cards.nth(i).getByText(/Company:\s*(Aqarmap|CSA Academy)/)).toHaveCount(1);
+  await expect(page.getByText("CSA Academy", { exact: true }).first()).toBeVisible();
 });
 
 test("mobile menu navigates", async ({ page, isMobile }) => {

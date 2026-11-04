@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import type { CaseStudyMeta } from "@/lib/content/schemas";
 import { Cover } from "@/components/visuals/Cover";
 import { cn } from "@/components/ui/primitives";
+import { CompanyLabel } from "@/components/detail/CaseStudyDocument";
 
 const cardBase =
   "group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-line bg-white transition-all duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-[0_24px_60px_-28px_rgba(29,111,174,0.35)] focus-within:border-blue-300";
@@ -43,6 +44,7 @@ export function AchievementCard({ meta, priority }: { meta: CaseStudyMeta; prior
       </div>
       <div className="flex flex-1 items-center justify-between gap-4 p-5 sm:p-6">
         <div className="min-w-0">
+          <CompanyLabel company={meta.company} className="mb-2" />
           <h3 className="text-lg font-semibold tracking-[-0.02em] text-ink sm:text-xl">
             <CardLink href={`/case-studies/${meta.slug}`}>{meta.title}</CardLink>
           </h3>
@@ -68,6 +70,7 @@ export function CaseStudySlide({ meta }: { meta: CaseStudyMeta }) {
         />
       </Link>
       <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
+        <CompanyLabel company={meta.company} className="mb-3 w-fit" />
         <h3 className="text-2xl font-semibold tracking-[-0.03em] text-ink sm:text-3xl">{meta.title}</h3>
         <p className="mt-2 text-lg font-medium text-accent">{meta.headlineMetric}</p>
         <p className="mt-4 leading-relaxed text-muted">{meta.summary}</p>

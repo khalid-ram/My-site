@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Download, Maximize2 } from "lucide-react";
+import { ArrowLeft, Download, ExternalLink, Maximize2 } from "lucide-react";
 import type { CaseStudyMeta } from "@/lib/content/schemas";
 
 type Doc = NonNullable<CaseStudyMeta["document"]>;
@@ -28,28 +28,49 @@ export function DownloadPdfButton({ doc, variant = "primary", className = "" }: 
  * Renders a designed case study (exported from Figma) as centered stacked
  * sections — the same pages as the downloadable PDF, but responsive and fast.
  */
-export function CaseStudyDocument({ doc, title }: { doc: Doc; title: string }) {
+/** Design width of the Figma frames (all case studies are 1440 wide). */
+const DESIGN_W = 1440;
+
+export function CaseStudyDocument({ doc, title, company }: { doc: Doc; title: string; company: string }) {
   return (
     <section id="case-study" aria-label={`${title} — full case study`} className="pb-16 md:pb-24">
       {/* Artboard: the design sits centered at page width, like a frame on the Figma canvas */}
       <div className="bg-black/90 pt-5 sm:pb-10 sm:pt-8 md:pb-14 md:pt-10">
         <div className="mx-auto w-full max-w-[72rem] sm:px-6 lg:px-8">
-        <div className="mb-5 flex items-center justify-between gap-4 px-4 sm:mb-6 sm:px-0">
-          <Link
-            href="/case-studies"
-            className="inline-flex min-h-10 items-center gap-1.5 text-sm font-medium text-white/70 transition-colors hover:text-white"
-          >
-            <ArrowLeft aria-hidden className="size-4" />
-            All case studies
-          </Link>
-          <a
-            href={doc.pdf}
-            download={doc.pdf.split("/").pop()}
-            className="inline-flex min-h-10 items-center gap-2 rounded-full bg-white/10 px-4 text-sm font-medium text-white transition-colors hover:bg-white/20"
-          >
-            <Download aria-hidden className="size-4" />
-            Download PDF
-          </a>
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3 px-4 sm:mb-6 sm:px-0">
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href="/case-studies"
+              className="inline-flex min-h-10 items-center gap-1.5 text-sm font-medium text-white/70 transition-colors hover:text-white"
+            >
+              <ArrowLeft aria-hidden className="size-4" />
+              All case studies
+            </Link>
+            <CompanyLabel company={company} tone="dark" />
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {doc.links.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-10 items-center gap-2 rounded-full bg-accent px-4 text-sm font-medium text-white transition-colors hover:bg-accent-strong"
+              >
+                <ExternalLink aria-hidden className="size-4" />
+                {l.label}
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            ))}
+            <a
+              href={doc.pdf}
+              download={doc.pdf.split("/").pop()}
+              className="inline-flex min-h-10 items-center gap-2 rounded-full bg-white/10 px-4 text-sm font-medium text-white transition-colors hover:bg-white/20"
+            >
+              <Download aria-hidden className="size-4" />
+              Download PDF
+            </a>
+          </div>
         </div>
         <div className="overflow-hidden bg-white sm:rounded-2xl sm:border sm:border-white/10 sm:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]">
           {doc.pages.map((p, i) => (
@@ -64,6 +85,24 @@ export function CaseStudyDocument({ doc, title }: { doc: Doc; title: string }) {
                 sizes="(min-width: 1152px) 1088px, 100vw"
                 className="block h-auto w-full"
               />
+              {/* Clickable areas placed exactly over links drawn in the design */}
+              {p.links.map((l) => (
+                <a
+                  key={`${l.href}-${l.x}-${l.y}`}
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={l.label}
+                  aria-label={`${l.label} (opens in a new tab)`}
+                  className="absolute z-10 rounded-lg ring-accent/0 transition hover:bg-accent/10 hover:ring-2 hover:ring-accent focus-visible:bg-accent/10 focus-visible:ring-2 focus-visible:ring-accent"
+                  style={{
+                    left: `${(l.x / DESIGN_W) * 100}%`,
+                    top: `${(l.y / (p.height / 2)) * 100}%`,
+                    width: `${(l.w / DESIGN_W) * 100}%`,
+                    height: `${(l.h / (p.height / 2)) * 100}%`,
+                  }}
+                />
+              ))}
               <a
                 href={p.src}
                 target="_blank"
@@ -89,5 +128,20 @@ export function CaseStudyDocument({ doc, title }: { doc: Doc; title: string }) {
         </div>
       </div>
     </section>
+  );
+}
+
+/** Small pill naming the company a case study was done for. */
+export function CompanyLabel({ company, tone = "light", className = "" }: { company: string; tone?: "light" | "dark"; className?: string }) {
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${
+        tone === "dark" ? "bg-white/10 text-white" : "border border-blue-200 bg-blue-50 text-accent-strong"
+      } ${className}`}
+    >
+      <span aria-hidden className={`size-1.5 rounded-full ${tone === "dark" ? "bg-blue-300" : "bg-accent"}`} />
+      <span className="sr-only">Company: </span>
+      {company}
+    </span>
   );
 }
