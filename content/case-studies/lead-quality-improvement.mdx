@@ -1,0 +1,83 @@
+---
+id: cs-03
+slug: lead-quality-improvement
+title: Lead Quality
+summary: Fewer fake, broker and duplicate leads, so brokers spend time on real buyers. We found the three biggest sources of bad leads and fixed each one at the source.
+category: Lead Quality · Trust & Safety · B2B
+tags: [Lead Quality, OTP, Fraud Detection, Brokers]
+cover: { variant: rings, image: /case-studies/lead-quality/01-cover.webp, alt: "Lead Quality case study cover" }
+status: published
+featured: true
+order: -3
+company: Aqarmap
+role: Senior Product Manager
+period: 2023 – 2025
+achievement: Cut wrong or fake number labels from ~22% to ~0%, caught 1 in 4 bad leads before they reached brokers, and kept ~97% of lead volume after adding OTP verification.
+headlineMetric: "~22% → ~0% fake numbers"
+metrics:
+  - { label: Wrong or fake number labels, value: "~22% → ~0%" }
+  - { label: Leads caught by the detection model and not counted for brokers, value: "1 in 4" }
+  - { label: Lead volume kept after adding OTP, value: "~97%" }
+  - { label: Randomly called customers satisfied with lead quality, value: "90%" }
+completeness: complete
+seoDescription: Lead Quality case study — OTP verification, broker and duplicate flags, and a detection model that cut fake-number leads from ~22% to ~0% at Aqarmap.
+# Source: Figma "Khalid Ram — Aqarmap Case Studies", frame "Case Study 02 — Lead Quality".
+document:
+  pdf: /case-studies/lead-quality/Lead-Quality-Case-Study-Khaled-Ramadan.pdf
+  pdfSize: 8.6 MB
+  pages:
+    - id: cover
+      title: Cover
+      src: /case-studies/lead-quality/01-cover.webp
+      width: 2880
+      height: 1800
+      alt: "Lead Quality — fewer fake, broker and duplicate leads, so brokers spend time on real buyers. Cover with the OTP verification screens on web and mobile."
+    - id: overview
+      title: Project Overview
+      src: /case-studies/lead-quality/02-overview.webp
+      width: 2880
+      height: 1720
+      alt: "Project overview: brokers pay for leads, but many leads were not real buyers. We found the three biggest sources of bad leads and fixed each one at the source. Role: Product Manager. Users: brokers and home seekers. Platforms: Web, iOS, Android. Timeline: 2023 to 2025."
+    - id: what-makes-us-different
+      title: What Makes Us Different
+      src: /case-studies/lead-quality/03-what-makes-us-different.webp
+      width: 2880
+      height: 2340
+      alt: "What makes us different: other platforms show brokers only a lead count with no names, while Aqarmap gives every lead a name and a verified phone number, which is why lead quality matters."
+    - id: understanding-the-problem
+      title: Understanding the Problem
+      src: /case-studies/lead-quality/04-understanding-the-problem.webp
+      width: 2880
+      height: 2542
+      alt: "Understanding the problem: we listened to broker complaints, analysed the labels brokers gave leads, and called leads to validate them. About 60% of leads never got a label. Of labelled leads, the largest groups were wrong number (~22%), broker (~18%), and no answer (~15%), and about 30% of leads were duplicates. Three causes were behind most bad leads."
+    - id: problem-and-solution
+      title: Problem & Solution
+      src: /case-studies/lead-quality/05-problem-and-solution.webp
+      width: 2880
+      height: 2972
+      alt: "Problem and solution: wrong numbers were fixed with OTP verification of the lead's phone; brokers posing as buyers with a broker flag for users with an active package; duplicate leads with a duplicate flag so only the first lead counts; and scrapers harvesting numbers with scraper detection and reCAPTCHA on fast repeated calls."
+    - id: detection-model
+      title: Lead Detection Model
+      src: /case-studies/lead-quality/06-detection-model.webp
+      width: 2880
+      height: 3664
+      alt: "Lead detection model: every new lead passes through rules for scrapers, brokers, and duplicates. Leads that match any condition are soft-deleted: the seller's real number is never shown, the user sees a confirmation message, and the broker sees the lead marked suspicious and not counted. Leads that pass every condition are real: the user gets the seller's number and the broker gets the lead with a name and verified phone."
+    - id: the-otp-challenge
+      title: The OTP Challenge
+      src: /case-studies/lead-quality/07-the-otp-challenge.webp
+      width: 2880
+      height: 3016
+      alt: "The OTP challenge: OTP raised quality but risked lead volume. Before OTP, 25% of leads came without data. Adding OTP with 3 free leads per session left 65% without data; removing free leads cut lead volume by 46%; allowing 1 free lead per session brought back about 97% of volume with 23% of leads without data, so brokers got their usual lead flow."
+    - id: user-flow
+      title: User Flow
+      src: /case-studies/lead-quality/08-user-flow.webp
+      width: 2880
+      height: 1184
+      alt: "User flow for a home seeker getting the seller's number: tap Show number, enter phone number, enter OTP code, add name and email the first time only, and see the seller's number."
+    - id: impact
+      title: The Impact
+      src: /case-studies/lead-quality/09-impact.webp
+      width: 2880
+      height: 2012
+      alt: "The impact: about 97% of lead volume kept after adding OTP; 1 in 4 leads caught by the detection model and soft-deleted, not counted for brokers; 90% of 10 randomly called customers satisfied with lead quality; and wrong or fake number labels down to about 0% from about 22%."
+---
