@@ -132,10 +132,32 @@ test("case studies open straight into the content (no intro hero)", async ({ pag
   await expect(page.getByText("Main achievement")).toHaveCount(0);
 });
 
-test("next-case navigation follows the achievements order", async ({ page }) => {
+test("other case studies slider shows one at a time with dots", async ({ page }) => {
   await page.goto("/case-studies/lead-quality-improvement");
-  await page.getByRole("navigation", { name: "Next" }).getByRole("link").click();
-  await expect(page).toHaveURL(/\/case-studies\/listing-cloning$/);
+  const slider = page.locator('section[aria-labelledby="other-case-studies"]');
+  await expect(slider.getByRole("heading", { name: "Other case studies" })).toBeVisible();
+  await expect(slider.locator("li")).toHaveCount(caseStudies.length - 1);
+  await expect(slider.locator('a[href="/case-studies/lead-quality-improvement"]')).toHaveCount(0);
+  const dots = slider.getByRole("group", { name: "Choose a case study" }).getByRole("button");
+  await expect(dots).toHaveCount(caseStudies.length - 1);
+  await expect(dots.nth(0)).toHaveAttribute("aria-current", "true");
+  await slider.scrollIntoViewIfNeeded();
+  await dots.nth(1).click();
+  await expect(dots.nth(1)).toHaveAttribute("aria-current", "true");
+  const current = slider.locator('li[aria-hidden="false"]');
+  await expect(current).toHaveCount(1);
+  await current.getByRole("link", { name: "View case study" }).click();
+  await expect(page).toHaveURL(/\/case-studies\/sub-accounts$/);
+});
+
+test("back-to-top button appears after scrolling and returns to top", async ({ page }) => {
+  await page.goto("/case-studies/aqarmap-pro");
+  const btn = page.getByRole("button", { name: "Back to top" });
+  await expect(btn).toHaveCount(0);
+  await page.evaluate(() => window.scrollTo(0, 3000));
+  await expect(btn).toBeVisible();
+  await btn.click();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(5);
 });
 
 test("mobile menu navigates", async ({ page, isMobile }) => {

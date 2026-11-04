@@ -7,6 +7,8 @@ import { RichContent } from "@/components/mdx/RichContent";
 import { BeforeAfter } from "@/components/mdx/blocks";
 import { CaseStudyDocument, DownloadPdfButton } from "@/components/detail/CaseStudyDocument";
 import { ButtonLink } from "@/components/ui/primitives";
+import { CaseStudySlider } from "@/components/detail/CaseStudySlider";
+import { CaseStudySlide } from "@/components/cards";
 import { profile } from "@/data/profile";
 import { siteUrl } from "@/lib/site";
 import { pageMeta } from "@/lib/seo";
@@ -66,7 +68,8 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
 
   const all = getCaseStudies();
   const idx = all.findIndex((c) => c.meta.slug === slug);
-  const next = all[(idx + 1) % all.length];
+  // Every other case study, starting with the one after this.
+  const others = [...all.slice(idx + 1), ...all.slice(0, idx)];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -115,10 +118,16 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
         headings={headings}
         missing={meta.missing}
         aside={meta.completeness !== "complete" ? <TalkCTA topic="this work" /> : undefined}
-        next={{ href: `/case-studies/${next.meta.slug}`, label: "Next case study", title: next.meta.title, summary: next.meta.summary }}
       >
         {body ? <RichContent source={body} components={{ Results: () => <Results meta={meta} /> }} /> : null}
       </DetailLayout>
+      {others.length > 0 && (
+        <CaseStudySlider title="Other case studies" labels={others.map((c) => c.meta.title)}>
+          {others.map((c) => (
+            <CaseStudySlide key={c.meta.slug} meta={c.meta} />
+          ))}
+        </CaseStudySlider>
+      )}
     </>
   );
 }

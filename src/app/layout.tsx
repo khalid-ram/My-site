@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { MotionProvider } from "@/components/motion";
+import { BackToTop } from "@/components/BackToTop";
 import { experience, profile } from "@/data/profile";
 import { siteUrl } from "@/lib/site";
 
@@ -80,6 +81,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             {children}
           </main>
           <Footer />
+          <BackToTop />
         </MotionProvider>
       </body>
     </html>

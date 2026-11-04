@@ -25,18 +25,19 @@ export function DownloadPdfButton({ doc, variant = "primary", className = "" }: 
 }
 
 /**
- * Renders a designed case study (exported from Figma) as full-width stacked
+ * Renders a designed case study (exported from Figma) as centered stacked
  * sections — the same pages as the downloadable PDF, but responsive and fast.
  */
 export function CaseStudyDocument({ doc, title }: { doc: Doc; title: string }) {
   return (
     <section id="case-study" aria-label={`${title} — full case study`} className="pb-16 md:pb-24">
-      {/* Sticky toolbar */}
-      <div className="sticky top-16 z-30 border-y border-line bg-white/85 backdrop-blur-xl md:top-[4.5rem]">
-        <div className="container-page flex items-center justify-between gap-4 py-3">
+      {/* Artboard: the design sits centered at page width, like a frame on the Figma canvas */}
+      <div className="bg-black/90 pt-5 sm:pb-10 sm:pt-8 md:pb-14 md:pt-10">
+        <div className="mx-auto w-full max-w-[72rem] sm:px-6 lg:px-8">
+        <div className="mb-5 flex items-center justify-between gap-4 px-4 sm:mb-6 sm:px-0">
           <Link
             href="/case-studies"
-            className="inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-full pr-1 text-sm font-medium text-ink hover:text-accent"
+            className="inline-flex min-h-10 items-center gap-1.5 text-sm font-medium text-white/70 transition-colors hover:text-white"
           >
             <ArrowLeft aria-hidden className="size-4" />
             All case studies
@@ -44,16 +45,13 @@ export function CaseStudyDocument({ doc, title }: { doc: Doc; title: string }) {
           <a
             href={doc.pdf}
             download={doc.pdf.split("/").pop()}
-            className="inline-flex min-h-10 shrink-0 items-center gap-2 rounded-full bg-ink px-4 text-sm font-medium text-white hover:bg-accent-strong"
+            className="inline-flex min-h-10 items-center gap-2 rounded-full bg-white/10 px-4 text-sm font-medium text-white transition-colors hover:bg-white/20"
           >
             <Download aria-hidden className="size-4" />
             Download PDF
           </a>
         </div>
-      </div>
-
-      <div className="mx-auto mt-4 max-w-[1440px] sm:px-4 md:mt-6">
-        <div className="overflow-hidden border-y border-line bg-white sm:rounded-[1.75rem] sm:border md:shadow-[0_30px_80px_-40px_rgba(23,44,66,0.25)]">
+        <div className="overflow-hidden bg-white sm:rounded-2xl sm:border sm:border-white/10 sm:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]">
           {doc.pages.map((p, i) => (
             <figure key={p.id} id={p.id} className="group relative scroll-mt-32 md:scroll-mt-36">
               <Image
@@ -63,7 +61,7 @@ export function CaseStudyDocument({ doc, title }: { doc: Doc; title: string }) {
                 height={p.height}
                 quality={90}
                 priority={i === 0}
-                sizes="(min-width: 1440px) 1440px, 100vw"
+                sizes="(min-width: 1152px) 1088px, 100vw"
                 className="block h-auto w-full"
               />
               <a
@@ -77,6 +75,7 @@ export function CaseStudyDocument({ doc, title }: { doc: Doc; title: string }) {
               </a>
             </figure>
           ))}
+        </div>
         </div>
       </div>
 

@@ -53,3 +53,32 @@ export function AchievementCard({ meta, priority }: { meta: CaseStudyMeta; prior
     </article>
   );
 }
+
+/** Slide for the "Other case studies" slider: cover beside title, result and summary. */
+export function CaseStudySlide({ meta }: { meta: CaseStudyMeta }) {
+  return (
+    <article className="grid overflow-hidden rounded-[1.5rem] border border-line bg-white md:grid-cols-[1.35fr_1fr]">
+      <Link href={`/case-studies/${meta.slug}`} tabIndex={-1} aria-hidden className="group block">
+        <Cover
+          variant={meta.cover.variant}
+          image={meta.cover.image}
+          alt=""
+          sizes="(min-width: 1024px) 640px, 100vw"
+          className="aspect-[16/10] h-full w-full [&_img]:transition-transform [&_img]:duration-700 group-hover:[&_img]:scale-[1.03]"
+        />
+      </Link>
+      <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
+        <h3 className="text-2xl font-semibold tracking-[-0.03em] text-ink sm:text-3xl">{meta.title}</h3>
+        <p className="mt-2 text-lg font-medium text-accent">{meta.headlineMetric}</p>
+        <p className="mt-4 leading-relaxed text-muted">{meta.summary}</p>
+        <Link
+          href={`/case-studies/${meta.slug}`}
+          className="group mt-6 inline-flex min-h-11 w-fit items-center gap-2 rounded-full bg-ink px-5 text-[0.95rem] font-medium text-white transition-colors hover:bg-accent-strong"
+        >
+          View case study
+          <ArrowUpRight aria-hidden className="size-4 transition-transform group-hover:rotate-45" />
+        </Link>
+      </div>
+    </article>
+  );
+}
