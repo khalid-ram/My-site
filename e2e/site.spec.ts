@@ -150,6 +150,24 @@ test("other case studies slider shows one at a time with dots", async ({ page })
   await expect(page).toHaveURL(/\/case-studies\/sub-accounts$/);
 });
 
+test("other case studies slider arrows move left and right and wrap", async ({ page }) => {
+  await page.goto("/case-studies/lead-quality-improvement");
+  const slider = page.locator('section[aria-labelledby="other-case-studies"]');
+  await slider.scrollIntoViewIfNeeded();
+  const dots = slider.getByRole("group", { name: "Choose a case study" }).getByRole("button");
+  const total = await dots.count();
+  const next = slider.getByRole("button", { name: "Next case study" }).locator("visible=true");
+  const prev = slider.getByRole("button", { name: "Previous case study" }).locator("visible=true");
+  await next.click();
+  await expect(dots.nth(1)).toHaveAttribute("aria-current", "true");
+  await prev.click();
+  await expect(dots.nth(0)).toHaveAttribute("aria-current", "true");
+  await prev.click(); // wraps to the last slide
+  await expect(dots.nth(total - 1)).toHaveAttribute("aria-current", "true");
+  await next.click(); // wraps back to the first
+  await expect(dots.nth(0)).toHaveAttribute("aria-current", "true");
+});
+
 test("back-to-top button appears after scrolling and returns to top", async ({ page }) => {
   await page.goto("/case-studies/aqarmap-pro");
   const btn = page.getByRole("button", { name: "Back to top" });
