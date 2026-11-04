@@ -12,8 +12,8 @@ const hiddenCaseStudies = caseFiles.filter((f) => !isPublished(f)).map((f) => f.
 const staticPages = ["/", "/case-studies", "/about", "/contact"];
 const allPages = [...staticPages, ...caseStudies.map((s) => `/case-studies/${s}`)];
 
-test("only the four designed case studies are published", () => {
-  expect(caseStudies.sort()).toEqual(["aqarmap-pro", "lead-quality-improvement", "listing-cloning", "sub-accounts"]);
+test("only the designed case studies are published", () => {
+  expect(caseStudies.sort()).toEqual(["aqarmap-pro", "lead-quality-improvement", "listing-cloning", "new-add-listing", "sub-accounts"]);
 });
 
 test("hidden case studies are not reachable or listed", async ({ page, request }) => {
@@ -23,7 +23,7 @@ test("hidden case studies are not reachable or listed", async ({ page, request }
     expect(html, s).toContain("This page doesn");
     await expect(page.locator(`a[href="/case-studies/${s}"]`)).toHaveCount(0);
   }
-  await expect(page.locator("main article")).toHaveCount(4);
+  await expect(page.locator("main article")).toHaveCount(caseStudies.length);
 });
 
 for (const url of allPages) {
