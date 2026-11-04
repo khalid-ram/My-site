@@ -40,7 +40,7 @@ export function CaseStudySlider({ title, labels, children }: { title: string; la
   };
 
   const arrow =
-    "grid size-11 place-items-center rounded-full border border-line bg-white text-ink shadow-[0_10px_30px_-12px_rgba(23,44,66,0.35)] transition-colors hover:border-ink hover:bg-ink hover:text-white";
+    "grid size-12 place-items-center rounded-full bg-accent text-white shadow-[0_12px_30px_-10px_rgba(29,111,174,0.75)] ring-4 ring-white transition-colors hover:bg-accent-strong";
 
   return (
     <section aria-labelledby="other-case-studies" aria-roledescription="carousel" className="border-t border-line bg-blue-50 py-14 md:py-20">
@@ -75,7 +75,7 @@ export function CaseStudySlider({ title, labels, children }: { title: string; la
                 aria-label="Previous case study"
                 className={cn(arrow, "absolute left-0 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 md:grid")}
               >
-                <ChevronLeft aria-hidden className="size-5" />
+                <ChevronLeft aria-hidden className="size-6" strokeWidth={2.5} />
               </button>
               <button
                 type="button"
@@ -83,7 +83,7 @@ export function CaseStudySlider({ title, labels, children }: { title: string; la
                 aria-label="Next case study"
                 className={cn(arrow, "absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 translate-x-1/2 md:grid")}
               >
-                <ChevronRight aria-hidden className="size-5" />
+                <ChevronRight aria-hidden className="size-6" strokeWidth={2.5} />
               </button>
             </>
           )}
@@ -92,7 +92,7 @@ export function CaseStudySlider({ title, labels, children }: { title: string; la
         {count > 1 && (
           <div className="mt-8 flex items-center justify-center gap-4">
             <button type="button" onClick={() => goTo(active - 1)} aria-label="Previous case study" className={cn(arrow, "md:hidden")}>
-              <ChevronLeft aria-hidden className="size-5" />
+              <ChevronLeft aria-hidden className="size-6" strokeWidth={2.5} />
             </button>
             <div className="flex gap-2.5" role="group" aria-label="Choose a case study">
               {labels.map((label, i) => (
@@ -110,7 +110,7 @@ export function CaseStudySlider({ title, labels, children }: { title: string; la
               ))}
             </div>
             <button type="button" onClick={() => goTo(active + 1)} aria-label="Next case study" className={cn(arrow, "md:hidden")}>
-              <ChevronRight aria-hidden className="size-5" />
+              <ChevronRight aria-hidden className="size-6" strokeWidth={2.5} />
             </button>
           </div>
         )}
