@@ -1,41 +1,39 @@
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { profile } from "@/data/profile";
-import { ButtonLink } from "@/components/ui/primitives";
 
+const textLink = "text-ink underline decoration-line underline-offset-[6px] hover:decoration-accent";
+
+/** Homepage hero: brief and static — name, title, one line, actions. */
 export function Hero() {
   return (
-    <section aria-labelledby="hero-title" className="relative isolate -mt-16 overflow-hidden pt-16 md:-mt-[4.5rem] md:pt-[4.5rem]">
-      {/* Background: white with soft blue, violet and peach light */}
-      <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-white via-blue-50 to-white" />
-      <div aria-hidden className="absolute -right-[18%] -top-[35%] -z-10 h-[42rem] w-[42rem] animate-drift rounded-full bg-[radial-gradient(circle,rgba(165,216,255,0.55),transparent_62%)]" />
-      <div aria-hidden className="absolute right-[12%] top-[30%] -z-10 h-[26rem] w-[26rem] animate-drift-slow rounded-full bg-[radial-gradient(circle,rgba(198,184,255,0.45),transparent_62%)]" />
-      <div aria-hidden className="absolute -bottom-[40%] -left-[12%] -z-10 h-[34rem] w-[34rem] animate-drift-slow rounded-full bg-[radial-gradient(circle,rgba(255,218,198,0.5),transparent_60%)]" />
-      <div aria-hidden className="absolute inset-0 -z-10 bg-grid [mask-image:linear-gradient(to_bottom,black,transparent_85%)] opacity-60" />
-
-      <div className="container-page pb-12 pt-12 sm:pt-16 md:pb-16 md:pt-20">
-        <div className="max-w-4xl">
-          <p className="animate-fade-up text-base text-muted sm:text-lg">
-            <span className="font-semibold text-ink">{profile.name}</span>
-            <span aria-hidden> · </span>
-            {profile.title}
-          </p>
-
-          <h1
-            id="hero-title"
-            className="animate-fade-up mt-4 text-[2.6rem] font-semibold leading-[1.02] tracking-[-0.045em] text-ink text-balance [animation-delay:80ms] sm:text-6xl md:text-7xl"
+    <section aria-labelledby="hero-title" className="border-b border-line">
+      <div className="container-page py-16 sm:py-20 lg:py-24">
+        <h1 id="hero-title" className="text-4xl font-semibold tracking-[-0.04em] text-ink sm:text-6xl">
+          {profile.fullName}
+        </h1>
+        <p className="mt-3 text-xl font-medium text-accent sm:text-2xl">{profile.title}</p>
+        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted">
+          I lead product strategy and delivery at Aqarmap, and I build with AI to help automate everyday product work.
+        </p>
+        <div className="mt-9 flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-8">
+          <Link
+            href="/case-studies"
+            className="inline-flex w-fit items-center gap-2 rounded-full bg-ink px-6 py-3 text-[0.98rem] font-medium text-white"
           >
-            Building products that make <span className="text-gradient">an impact.</span>
-          </h1>
-
-          <p className="animate-fade-up mt-5 text-lg text-muted [animation-delay:160ms] sm:text-xl">{profile.subline}</p>
-
-          <div className="animate-fade-up mt-8 flex flex-col gap-3 [animation-delay:240ms] sm:flex-row">
-            <ButtonLink href="/case-studies" icon="arrow">
-              Explore My Work
-            </ButtonLink>
-            <ButtonLink href={profile.cvPath} download={profile.cvFileName} variant="secondary" icon="download">
+            Explore my work <ArrowRight aria-hidden className="size-4" />
+          </Link>
+          <p className="flex flex-wrap gap-x-6 gap-y-2 text-[0.95rem]">
+            <a href={profile.cvPath} download={profile.cvFileName} className={textLink}>
               Download CV
-            </ButtonLink>
-          </div>
+            </a>
+            <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className={textLink}>
+              LinkedIn<span className="sr-only"> (opens in a new tab)</span>
+            </a>
+            <Link href="/contact" className={textLink}>
+              Get in touch
+            </Link>
+          </p>
         </div>
       </div>
     </section>

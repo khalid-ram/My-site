@@ -4,7 +4,10 @@ import { Children, useCallback, useEffect, useRef, useState, type ReactNode } fr
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/components/ui/primitives";
 
-/** One-at-a-time slider: swipeable, with left/right arrows and dot navigation. */
+/**
+ * One-at-a-time slider: swipeable, with dot navigation and standard arrows —
+ * "previous" only shows when there is a previous slide, "next" only when there is a next one.
+ */
 export function CaseStudySlider({ title, labels, children }: { title: string; labels: string[]; children: ReactNode }) {
   const track = useRef<HTMLUListElement>(null);
   const [active, setActive] = useState(0);
@@ -30,10 +33,13 @@ export function CaseStudySlider({ title, labels, children }: { title: string; la
     };
   }, [onScroll]);
 
+  const hasPrev = active > 0;
+  const hasNext = active < count - 1;
+
   const goTo = (i: number) => {
     const el = track.current;
     if (!el) return;
-    const target = (i + count) % count; // wrap around at both ends
+    const target = Math.min(Math.max(i, 0), count - 1); // no wrap-around
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     el.scrollTo({ left: target * el.clientWidth, behavior: reduce ? "auto" : "smooth" });
     setActive(target);
@@ -67,33 +73,38 @@ export function CaseStudySlider({ title, labels, children }: { title: string; la
             ))}
           </ul>
 
-          {count > 1 && (
-            <>
-              <button
-                type="button"
-                onClick={() => goTo(active - 1)}
-                aria-label="Previous case study"
-                className={cn(arrow, "absolute left-0 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 md:grid")}
-              >
-                <ChevronLeft aria-hidden className="size-6" strokeWidth={2.5} />
-              </button>
-              <button
-                type="button"
-                onClick={() => goTo(active + 1)}
-                aria-label="Next case study"
-                className={cn(arrow, "absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 translate-x-1/2 md:grid")}
-              >
-                <ChevronRight aria-hidden className="size-6" strokeWidth={2.5} />
-              </button>
-            </>
+          {hasPrev && (
+            <button
+              type="button"
+              onClick={() => goTo(active - 1)}
+              aria-label="Previous case study"
+              className={cn(arrow, "absolute left-0 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 md:grid")}
+            >
+              <ChevronLeft aria-hidden className="size-6" strokeWidth={2.5} />
+            </button>
+          )}
+          {hasNext && (
+            <button
+              type="button"
+              onClick={() => goTo(active + 1)}
+              aria-label="Next case study"
+              className={cn(arrow, "absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 translate-x-1/2 md:grid")}
+            >
+              <ChevronRight aria-hidden className="size-6" strokeWidth={2.5} />
+            </button>
           )}
         </div>
 
         {count > 1 && (
           <div className="mt-8 flex items-center justify-center gap-4">
-            <button type="button" onClick={() => goTo(active - 1)} aria-label="Previous case study" className={cn(arrow, "md:hidden")}>
-              <ChevronLeft aria-hidden className="size-6" strokeWidth={2.5} />
-            </button>
+            {/* Mobile arrows: a hidden arrow keeps its space so the dots stay centered */}
+            {hasPrev ? (
+              <button type="button" onClick={() => goTo(active - 1)} aria-label="Previous case study" className={cn(arrow, "md:hidden")}>
+                <ChevronLeft aria-hidden className="size-6" strokeWidth={2.5} />
+              </button>
+            ) : (
+              <span aria-hidden className="size-12 md:hidden" />
+            )}
             <div className="flex gap-2.5" role="group" aria-label="Choose a case study">
               {labels.map((label, i) => (
                 <button
@@ -109,9 +120,13 @@ export function CaseStudySlider({ title, labels, children }: { title: string; la
                 />
               ))}
             </div>
-            <button type="button" onClick={() => goTo(active + 1)} aria-label="Next case study" className={cn(arrow, "md:hidden")}>
-              <ChevronRight aria-hidden className="size-6" strokeWidth={2.5} />
-            </button>
+            {hasNext ? (
+              <button type="button" onClick={() => goTo(active + 1)} aria-label="Next case study" className={cn(arrow, "md:hidden")}>
+                <ChevronRight aria-hidden className="size-6" strokeWidth={2.5} />
+              </button>
+            ) : (
+              <span aria-hidden className="size-12 md:hidden" />
+            )}
           </div>
         )}
       </div>

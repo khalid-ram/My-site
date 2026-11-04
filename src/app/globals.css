@@ -34,6 +34,14 @@
   --animate-drift-slow: drift 34s ease-in-out infinite alternate-reverse;
 
   --animate-fade-up: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-scroll-cue: scroll-cue 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+
+  @keyframes scroll-cue {
+    0% { transform: translateY(0); opacity: 0; }
+    30% { opacity: 1; }
+    80% { transform: translateY(12px); opacity: 0; }
+    100% { opacity: 0; }
+  }
 
   @keyframes fade-up {
     from { opacity: 0; transform: translateY(14px); }
@@ -98,6 +106,11 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+@utility bg-grid-dots {
+  background-image: radial-gradient(rgb(23 44 66 / 0.09) 1px, transparent 1px);
+  background-size: 18px 18px;
 }
 
 @utility bg-grid {

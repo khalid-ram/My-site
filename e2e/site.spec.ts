@@ -147,10 +147,10 @@ test("other case studies slider shows one at a time with dots", async ({ page })
   const current = slider.locator('li[aria-hidden="false"]');
   await expect(current).toHaveCount(1);
   await current.getByRole("link", { name: "View case study" }).click();
-  await expect(page).toHaveURL(/\/case-studies\/sub-accounts$/);
+  await expect(page).toHaveURL(/\/case-studies\/aqarmap-pro$/);
 });
 
-test("other case studies slider arrows move left and right and wrap", async ({ page }) => {
+test("slider arrows follow standard logic: only shown when there is a previous/next slide", async ({ page }) => {
   await page.goto("/case-studies/lead-quality-improvement");
   const slider = page.locator('section[aria-labelledby="other-case-studies"]');
   await slider.scrollIntoViewIfNeeded();
@@ -158,14 +158,21 @@ test("other case studies slider arrows move left and right and wrap", async ({ p
   const total = await dots.count();
   const next = slider.getByRole("button", { name: "Next case study" }).locator("visible=true");
   const prev = slider.getByRole("button", { name: "Previous case study" }).locator("visible=true");
+  // First slide: only "next"
+  await expect(prev).toHaveCount(0);
+  await expect(next).toHaveCount(1);
   await next.click();
   await expect(dots.nth(1)).toHaveAttribute("aria-current", "true");
-  await prev.click();
-  await expect(dots.nth(0)).toHaveAttribute("aria-current", "true");
-  await prev.click(); // wraps to the last slide
+  // Middle: both
+  await expect(prev).toHaveCount(1);
+  await expect(next).toHaveCount(1);
+  // Last slide: only "previous"
+  await dots.nth(total - 1).click();
   await expect(dots.nth(total - 1)).toHaveAttribute("aria-current", "true");
-  await next.click(); // wraps back to the first
-  await expect(dots.nth(0)).toHaveAttribute("aria-current", "true");
+  await expect(next).toHaveCount(0);
+  await expect(prev).toHaveCount(1);
+  await prev.click();
+  await expect(dots.nth(total - 2)).toHaveAttribute("aria-current", "true");
 });
 
 test("back-to-top button appears after scrolling and returns to top", async ({ page }) => {
@@ -193,11 +200,15 @@ test("CSA Academy links to the live site and prototype from the design", async (
   expect(box && box.width > 20 && box.height > 5).toBeTruthy();
 });
 
-test("every achievement card shows its company", async ({ page }) => {
+test("every achievement card shows company and industry on the image", async ({ page }) => {
   await page.goto("/case-studies");
   const cards = page.locator("main article");
   const n = await cards.count();
-  for (let i = 0; i < n; i++) await expect(cards.nth(i).getByText(/Company:\s*(Aqarmap|CSA Academy)/)).toHaveCount(1);
+  for (let i = 0; i < n; i++) {
+    const label = cards.nth(i).locator("div.relative > span").filter({ hasText: /(Aqarmap|CSA Academy)/ });
+    await expect(label).toHaveCount(1);
+    await expect(label).toContainText(/(PropTech|EdTech)/);
+  }
   await expect(page.getByText("CSA Academy", { exact: true }).first()).toBeVisible();
 });
 
@@ -207,6 +218,46 @@ test("homepage shows every case study", async ({ page }) => {
     await expect(page.locator(`main a[href="/case-studies/${slug}"]`).first()).toHaveCount(1);
   }
   await expect(page.locator("main article")).toHaveCount(caseStudies.length);
+});
+
+test("hero is brief and static with working CTAs", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Khaled Ahmed Ramadan");
+  await expect(page.locator("#hero-spec")).toHaveCount(0);
+  const hero = page.locator('section[aria-labelledby="hero-title"]');
+  await expect(hero.locator("button")).toHaveCount(0);
+  await expect(hero.getByRole("link", { name: /Explore my work/ })).toHaveAttribute("href", "/case-studies");
+  await expect(hero.getByRole("link", { name: /LinkedIn/ })).toHaveAttribute("target", "_blank");
+  await expect(hero.getByRole("link", { name: "Get in touch" })).toHaveAttribute("href", "/contact");
+  await expect(hero.getByRole("link", { name: "Download CV" })).toHaveAttribute("download", /\.pdf$/);
+});
+
+test("navbar condenses into a floating pill on scroll and keeps the CV link", async ({ page, isMobile }) => {
+  await page.goto("/");
+  const nav = page.getByRole("navigation", { name: "Primary" });
+  await expect(nav).not.toHaveClass(/rounded-full/);
+  await page.evaluate(() => window.scrollTo(0, 800));
+  await expect(nav).toHaveClass(/rounded-full/);
+  if (!isMobile) await expect(nav.getByRole("link", { name: /CV/ })).toHaveAttribute("download", /\.pdf$/);
+});
+
+test("listing cloning is the last case study and the CV is the new one", async ({ page, request }) => {
+  await page.goto("/case-studies");
+  const links = await page.locator("main article a[href^='/case-studies/']").evaluateAll((as) => as.map((a) => a.getAttribute("href")));
+  expect(links[links.length - 1]).toBe("/case-studies/listing-cloning");
+  const pdf = await request.get("/Khaled-Ramadan-CV.pdf");
+  expect(pdf.status()).toBe(200);
+  expect((await pdf.body()).length).toBeLessThan(400_000);
+});
+
+test("about page reflects the CV", async ({ page }) => {
+  await page.goto("/about");
+  for (const t of ["AI Product Agent", "AI QA Agent · Lead Generation", "Torta Lab", "B.A. in Business Administration"]) {
+    await expect(page.getByText(t, { exact: true }).first()).toBeVisible();
+  }
+  await expect(page.getByRole("heading", { name: /Project Manager at CSA Academy/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Visit website/ })).toHaveAttribute("href", "https://torta-lab-omega.vercel.app");
+  await expect(page.getByText("Certifications")).toHaveCount(0);
 });
 
 test("mobile menu navigates", async ({ page, isMobile }) => {

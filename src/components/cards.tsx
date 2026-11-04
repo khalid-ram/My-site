@@ -32,7 +32,8 @@ function Arrow() {
 export function AchievementCard({ meta, priority }: { meta: CaseStudyMeta; priority?: boolean }) {
   return (
     <article className={cn(cardBase, "rounded-[1.5rem]")}>
-      <div className="border-b border-line">
+      <div className="relative border-b border-line">
+        <CompanyLabel company={meta.company} industry={meta.industry} tone="overlay" className="absolute left-4 top-4 z-[1] sm:left-5 sm:top-5" />
         <Cover
           variant={meta.cover.variant}
           image={meta.cover.image}
@@ -44,7 +45,6 @@ export function AchievementCard({ meta, priority }: { meta: CaseStudyMeta; prior
       </div>
       <div className="flex flex-1 items-center justify-between gap-4 p-5 sm:p-6">
         <div className="min-w-0">
-          <CompanyLabel company={meta.company} className="mb-2" />
           <h3 className="text-lg font-semibold tracking-[-0.02em] text-ink sm:text-xl">
             <CardLink href={`/case-studies/${meta.slug}`}>{meta.title}</CardLink>
           </h3>
@@ -60,7 +60,8 @@ export function AchievementCard({ meta, priority }: { meta: CaseStudyMeta; prior
 export function CaseStudySlide({ meta }: { meta: CaseStudyMeta }) {
   return (
     <article className="grid overflow-hidden rounded-[1.5rem] border border-line bg-white md:grid-cols-[1.35fr_1fr]">
-      <Link href={`/case-studies/${meta.slug}`} tabIndex={-1} aria-hidden className="group block">
+      <Link href={`/case-studies/${meta.slug}`} tabIndex={-1} aria-hidden className="group relative block">
+        <CompanyLabel company={meta.company} industry={meta.industry} tone="overlay" className="absolute left-4 top-4 z-[1] sm:left-5 sm:top-5" />
         <Cover
           variant={meta.cover.variant}
           image={meta.cover.image}
@@ -70,7 +71,6 @@ export function CaseStudySlide({ meta }: { meta: CaseStudyMeta }) {
         />
       </Link>
       <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
-        <CompanyLabel company={meta.company} className="mb-3 w-fit" />
         <h3 className="text-2xl font-semibold tracking-[-0.03em] text-ink sm:text-3xl">{meta.title}</h3>
         <p className="mt-2 text-lg font-medium text-accent">{meta.headlineMetric}</p>
         <p className="mt-4 leading-relaxed text-muted">{meta.summary}</p>

@@ -107,6 +107,8 @@ export const caseStudySchema = z.object({
   ...common,
   document: caseDocument.optional(),
   company: z.string(),
+  /** Industry shown with the company, e.g. "PropTech" or "EdTech". */
+  industry: z.string().optional(),
   role: z.string(),
   period: z.string().optional(),
   achievement: z.string().min(10),

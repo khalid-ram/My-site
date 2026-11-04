@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
-import { Award, GraduationCap, Languages } from "lucide-react";
+import { ArrowUpRight, GraduationCap, Languages } from "lucide-react";
 import { PageHero, ContactCTA, ExperienceTimeline, TagList } from "@/components/sections/shared";
-import { ButtonLink, Section, SectionHeader } from "@/components/ui/primitives";
+import { ButtonLink, Section, SectionHeader, cn } from "@/components/ui/primitives";
 import { Reveal } from "@/components/motion";
-import { certifications, competencies, education, languages, profile, tools } from "@/data/profile";
+import { builds, competencies, education, languages, profile, tools } from "@/data/profile";
 
 export const metadata: Metadata = pageMeta({
   title: "About",
   description:
-    "About Khaled Ramadan, Senior Product Manager at Aqarmap: career journey, product philosophy, experience, skills, tools, and certifications.",
+    "About Khaled Ahmed Ramadan, Senior Product Manager at Aqarmap: experience, AI agents and vibe-coding projects, skills and education.",
   path: "/about",
 });
 
@@ -25,7 +25,10 @@ export default function AboutPage() {
         }
         description={
           <p>
-            I&apos;m {profile.firstName}, a {profile.title} based in {profile.location}. I&apos;ve worked in product since 2019, first as a Product Owner at Bites, and since 2022 as Senior Product Manager at Aqarmap, a real estate technology platform serving buyers, sellers, brokers, and real estate businesses.
+            Senior Product Manager working in product since 2019 across B2B and B2C products. At Aqarmap I lead discovery,
+            strategy and delivery for monetization, lead quality and listing experiences. As a freelancer I took an EdTech
+            platform from concept to a live product. I think strategically and enjoy building: I prototype with AI tools and
+            create AI agents that help automate everyday product work.
           </p>
         }
       >
@@ -39,53 +42,6 @@ export default function AboutPage() {
         </div>
       </PageHero>
 
-      {/* Philosophy */}
-      <Section tone="tint" labelledBy="philosophy">
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">Product Philosophy</p>
-            <h2 id="philosophy" className="mt-4 text-3xl font-semibold tracking-[-0.03em] text-ink sm:text-4xl">
-              How I think about the job.
-            </h2>
-          </div>
-          <Reveal>
-            <blockquote className="text-2xl font-medium leading-snug tracking-[-0.02em] text-ink text-balance sm:text-3xl">
-              &ldquo;{profile.philosophy}&rdquo;
-            </blockquote>
-          </Reveal>
-        </div>
-      </Section>
-
-      {/* Career journey */}
-      <Section labelledBy="journey">
-        <SectionHeader eyebrow="Career Journey" title={<span id="journey">From product owner to product leader.</span>} />
-        <ol className="mt-12 grid gap-5 md:grid-cols-3">
-          {[
-            {
-              year: "2019",
-              title: "Product Owner at Bites",
-              text: "Defined product features around customer needs, led development end to end, and acted as the main point of contact between teams and stakeholders.",
-            },
-            {
-              year: "2022",
-              title: "Senior Product Manager at Aqarmap",
-              text: "Owning research, roadmap, and delivery across B2B and B2C, with outcomes in conversion, monetization, lead quality, growth, and delivery efficiency.",
-            },
-            {
-              year: "2025",
-              title: "Freelance: EduSmart",
-              text: "Led an EdTech marketplace from concept to a delivery-ready MVP, from competitive analysis and Figma prototypes through to client handover.",
-            },
-          ].map((s, i) => (
-            <Reveal as="li" key={s.year} delay={i * 0.06} className="rounded-[1.75rem] border border-line bg-white p-7">
-              <p className="font-mono text-sm text-accent">{s.year}</p>
-              <h3 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-ink">{s.title}</h3>
-              <p className="mt-3 leading-relaxed text-muted">{s.text}</p>
-            </Reveal>
-          ))}
-        </ol>
-      </Section>
-
       {/* Experience */}
       <Section tone="tint" id="experience" labelledBy="experience-title">
         <SectionHeader eyebrow="Experience" title={<span id="experience-title">Professional experience.</span>} />
@@ -94,12 +50,77 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      {/* Competencies & tools */}
-      <Section labelledBy="skills">
-        <SectionHeader eyebrow="Skills" title={<span id="skills">Core competencies.</span>} />
-        <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {/* AI agents & vibe coding */}
+      <Section labelledBy="builds">
+        <SectionHeader eyebrow="AI Agents & Vibe Coding" title={<span id="builds">What I build beyond my role.</span>} />
+        <ul className="mt-12 grid gap-5">
+          {builds.map((b, i) => (
+            <Reveal as="li" key={b.name} delay={i * 0.05} className="rounded-[1.5rem] border border-line border-l-4 border-l-accent bg-white p-6 sm:p-8">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h3 className="text-xl font-semibold tracking-[-0.02em] text-ink">{b.name}</h3>
+                {b.status && (
+                  <span
+                    className={cn(
+                      "rounded-full px-3 py-1 text-xs font-semibold",
+                      b.status === "Live" ? "bg-mint-soft text-mint-ink" : "bg-blue-100 text-accent-strong",
+                    )}
+                  >
+                    {b.status}
+                  </span>
+                )}
+              </div>
+              <p className="mt-2 leading-relaxed text-muted">{b.summary}</p>
+
+              {b.steps.length > 0 && (
+                <ol className={cn("mt-5 grid gap-3 sm:grid-cols-2", b.steps.length === 5 ? "lg:grid-cols-5" : "lg:grid-cols-4")}>
+                  {b.steps.map((st, n) => (
+                    <li key={st.title} className="flex gap-3 rounded-2xl bg-blue-50 p-4">
+                      <span className="grid size-6 shrink-0 place-items-center rounded-full bg-accent text-xs font-semibold text-white">{n + 1}</span>
+                      <span>
+                        <span className="block text-sm font-semibold text-ink">{st.title}</span>
+                        <span className="mt-0.5 block text-sm text-muted">{st.note}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              )}
+
+              <ul className="mt-5 flex flex-wrap gap-2" aria-label="Built with">
+                {b.stack.map((t) => (
+                  <li key={t} className="rounded-md border border-line bg-blue-50/60 px-2.5 py-1 text-xs text-ink">
+                    {t}
+                  </li>
+                ))}
+              </ul>
+
+              {b.links.length > 0 && (
+                <p className="mt-5 flex flex-wrap gap-5">
+                  {b.links.map((l) => (
+                    <a
+                      key={l.href}
+                      href={l.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group inline-flex items-center gap-1 font-medium text-accent hover:text-accent-strong"
+                    >
+                      {l.label}
+                      <ArrowUpRight aria-hidden className="size-4 transition-transform group-hover:rotate-45" />
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                  ))}
+                </p>
+              )}
+            </Reveal>
+          ))}
+        </ul>
+      </Section>
+
+      {/* Skills */}
+      <Section tone="tint" labelledBy="skills">
+        <SectionHeader eyebrow="Skills" title={<span id="skills">Skills & tools.</span>} />
+        <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {competencies.map((c, i) => (
-            <Reveal as="li" key={c.title} delay={(i % 3) * 0.05} className="rounded-[1.5rem] border border-line bg-white p-6">
+            <Reveal as="li" key={c.title} delay={(i % 4) * 0.05} className="rounded-[1.5rem] border border-line bg-white p-6">
               <h3 className="font-semibold text-ink">{c.title}</h3>
               <ul className="mt-3 space-y-1.5">
                 {c.items.map((it) => (
@@ -111,44 +132,31 @@ export default function AboutPage() {
             </Reveal>
           ))}
         </ul>
-        <div className="mt-14">
-          <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-muted">Tools & technologies</h3>
+        <div className="mt-10">
+          <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-muted">Tools</h3>
           <div className="mt-4">
-            <TagList items={tools} label="Tools and technologies" />
+            <TagList items={tools} label="Tools" />
           </div>
         </div>
       </Section>
 
-      {/* Credentials */}
-      <Section tone="tint" labelledBy="credentials">
-        <SectionHeader eyebrow="Credentials" title={<span id="credentials">Education & certifications.</span>} />
-        <div className="mt-12 grid gap-5 lg:grid-cols-[1fr_1.6fr]">
-          <div className="space-y-5">
-            <div className="rounded-[1.5rem] border border-line bg-white p-6">
-              <GraduationCap aria-hidden className="size-6 text-accent" />
-              <p className="mt-4 font-semibold text-ink">{education.degree}</p>
-              <p className="text-muted">
-                {education.school} · {education.period}
-              </p>
-            </div>
-            <div className="rounded-[1.5rem] border border-line bg-white p-6">
-              <Languages aria-hidden className="size-6 text-accent" />
-              <ul className="mt-4 space-y-1">
-                {languages.map((l) => (
-                  <li key={l.name} className="text-ink">
-                    <span className="font-semibold">{l.name}</span> <span className="text-muted">· {l.level}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+      {/* Education & languages */}
+      <Section labelledBy="education">
+        <SectionHeader eyebrow="Education & Languages" title={<span id="education">Background.</span>} />
+        <div className="mt-12 grid gap-5 sm:grid-cols-2">
+          <div className="rounded-[1.5rem] border border-line bg-white p-6">
+            <GraduationCap aria-hidden className="size-6 text-accent" />
+            <p className="mt-4 font-semibold text-ink">{education.degree}</p>
+            <p className="text-muted">
+              {education.school} · {education.period}
+            </p>
           </div>
           <div className="rounded-[1.5rem] border border-line bg-white p-6">
-            <Award aria-hidden className="size-6 text-accent" />
-            <ul className="mt-4 divide-y divide-line">
-              {certifications.map((c) => (
-                <li key={c.name} className="flex flex-col justify-between gap-1 py-3 sm:flex-row sm:items-center">
-                  <span className="text-ink">{c.name}</span>
-                  <span className="text-sm text-muted">{c.issuer}</span>
+            <Languages aria-hidden className="size-6 text-accent" />
+            <ul className="mt-4 space-y-1">
+              {languages.map((l) => (
+                <li key={l.name} className="text-ink">
+                  <span className="font-semibold">{l.name}</span> <span className="text-muted">· {l.level}</span>
                 </li>
               ))}
             </ul>

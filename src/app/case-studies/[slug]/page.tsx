@@ -114,7 +114,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/case-studies
             </>
           ) : undefined
         }
-        wide={meta.document ? <CaseStudyDocument doc={meta.document} title={meta.title} company={meta.company} /> : undefined}
+        wide={meta.document ? <CaseStudyDocument doc={meta.document} title={meta.title} company={meta.company} industry={meta.industry} /> : undefined}
         headings={headings}
         missing={meta.missing}
         aside={meta.completeness !== "complete" ? <TalkCTA topic="this work" /> : undefined}

@@ -31,7 +31,7 @@ export function DownloadPdfButton({ doc, variant = "primary", className = "" }: 
 /** Design width of the Figma frames (all case studies are 1440 wide). */
 const DESIGN_W = 1440;
 
-export function CaseStudyDocument({ doc, title, company }: { doc: Doc; title: string; company: string }) {
+export function CaseStudyDocument({ doc, title, company, industry }: { doc: Doc; title: string; company: string; industry?: string }) {
   return (
     <section id="case-study" aria-label={`${title} — full case study`} className="pb-16 md:pb-24">
       {/* Artboard: the design sits centered at page width, like a frame on the Figma canvas */}
@@ -46,7 +46,7 @@ export function CaseStudyDocument({ doc, title, company }: { doc: Doc; title: st
               <ArrowLeft aria-hidden className="size-4" />
               All case studies
             </Link>
-            <CompanyLabel company={company} tone="dark" />
+            <CompanyLabel company={company} industry={industry} tone="dark" />
           </div>
           <div className="flex flex-wrap gap-2">
             {doc.links.map((l) => (
@@ -131,17 +131,37 @@ export function CaseStudyDocument({ doc, title, company }: { doc: Doc; title: st
   );
 }
 
-/** Small pill naming the company a case study was done for. */
-export function CompanyLabel({ company, tone = "light", className = "" }: { company: string; tone?: "light" | "dark"; className?: string }) {
+/** Small pill naming the company (and industry) a case study was done for. */
+export function CompanyLabel({
+  company,
+  industry,
+  tone = "light",
+  className = "",
+}: {
+  company: string;
+  industry?: string;
+  tone?: "light" | "dark" | "overlay";
+  className?: string;
+}) {
+  const styles = {
+    light: "border border-blue-200 bg-blue-50 text-accent-strong",
+    dark: "bg-white/10 text-white",
+    overlay: "bg-white/90 text-ink shadow-[0_6px_20px_-8px_rgba(23,44,66,0.45)] ring-1 ring-black/5 backdrop-blur",
+  }[tone];
   return (
-    <span
-      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${
-        tone === "dark" ? "bg-white/10 text-white" : "border border-blue-200 bg-blue-50 text-accent-strong"
-      } ${className}`}
-    >
+    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${styles} ${className}`}>
       <span aria-hidden className={`size-1.5 rounded-full ${tone === "dark" ? "bg-blue-300" : "bg-accent"}`} />
       <span className="sr-only">Company: </span>
       {company}
+      {industry && (
+        <>
+          <span aria-hidden className={tone === "dark" ? "text-white/40" : "text-muted/60"}>·</span>
+          <span className={tone === "dark" ? "text-white/75" : "font-medium text-muted"}>
+            <span className="sr-only">, industry: </span>
+            {industry}
+          </span>
+        </>
+      )}
     </span>
   );
 }
