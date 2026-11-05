@@ -6,7 +6,7 @@ import { PageHero, ContactCTA } from "@/components/sections/shared";
 import { Reveal } from "@/components/motion";
 
 export const metadata: Metadata = pageMeta({
-  title: "Achievements",
+  title: "Key Achievements",
   description:
     "Product achievements by Khaled Ramadan at Aqarmap: Lead Quality, Listing Cloning, Sub Accounts, and Aqarmap Pro.",
   path: "/case-studies",
@@ -16,7 +16,7 @@ export default function CaseStudiesPage() {
   const cases = getCaseStudies();
   return (
     <>
-      <PageHero title="Achievements" className="[&>div:last-child]:pb-8 md:[&>div:last-child]:pb-10" />
+      <PageHero title="Key Achievements" className="[&>div:last-child]:pb-8 md:[&>div:last-child]:pb-10" />
       <section aria-label="All achievements" className="pb-8">
         <div className="container-page">
           <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 [&>li]:min-w-0">

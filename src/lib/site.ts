@@ -6,7 +6,7 @@ export const siteUrl = (
 ).replace(/\/$/, "");
 
 export const nav = [
-  { href: "/case-studies", label: "Achievements" },
+  { href: "/case-studies", label: "Key Achievements" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ] as const;

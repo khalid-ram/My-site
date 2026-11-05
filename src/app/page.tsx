@@ -6,7 +6,7 @@ import { Reveal } from "@/components/motion";
 import { getCaseStudies } from "@/lib/content";
 
 export default function Home() {
-  // All published case studies, in the same order as the Achievements page.
+  // All published case studies, in the same order as the Key Achievements page.
   const cases = getCaseStudies();
 
   return (
@@ -16,7 +16,7 @@ export default function Home() {
       {/* All case studies */}
       <Section labelledBy="featured-work" spacing="compact">
         <SectionHeader
-          title={<span id="featured-work">Selected achievements</span>}
+          title={<span id="featured-work">Key achievements</span>}
           description="A few of my achievements, each told as a case study."
         />
         <ul className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 [&>li]:min-w-0">

@@ -14,7 +14,7 @@ export function Hero() {
         </h1>
         <p className="mt-3 text-xl font-medium text-accent sm:text-2xl">{profile.title}</p>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted">
-          I lead product strategy and delivery at Aqarmap, and I build with AI to help automate everyday product work.
+          Passionate about building products that make an impact, from strategy to hands-on execution.
         </p>
         <div className="mt-9 flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-8">
           <Link
