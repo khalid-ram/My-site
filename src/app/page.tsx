@@ -17,7 +17,7 @@ export default function Home() {
       <Section labelledBy="featured-work" spacing="compact">
         <SectionHeader
           title={<span id="featured-work">Key achievements</span>}
-          description="A few of my achievements, each told as a case study."
+          description="Some of my achievements, each told as a case study."
         />
         <ul className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 [&>li]:min-w-0">
           {cases.map((entry, i) => (
